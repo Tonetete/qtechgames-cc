@@ -12,15 +12,15 @@ export const GameCatalogueList: React.FC = () => {
   return (
     <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       {games.map(game => {
-        const { id, title, thumbnail, release_date, volatility, demo_url } = game
+        const { id, title, thumbnail, studio, rating, demo_url } = game
         return (
           <Card 
            key={id} 
-           title={title} 
-           image={thumbnail} 
-           date={release_date}
+           title={title}
+           studio={studio}
+           thumbnail={thumbnail}
            url={demo_url}
-           volatility={volatility}
+           rating={rating}
           />
       )})
       }
