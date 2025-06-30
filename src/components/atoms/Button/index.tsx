@@ -1,2 +1,2 @@
-import { ButtonComponent } from './Button.component';
-export { ButtonComponent };
+import { Button } from './Button';
+export { Button };

@@ -12,7 +12,7 @@ const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
   lg: 'py-3 px-6 text-lg',
 };
 
-export const ButtonComponent: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   title,
   handler,
   size = 'md',
