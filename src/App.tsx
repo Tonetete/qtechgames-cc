@@ -1,21 +1,21 @@
-import React from 'react'
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { GameCatalogueList } from './components/pages/GameCatalogueList';
-import './App.css';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import {GameCatalogueDetail} from "./components/pages/GameCatalogueDetail";
+import { GameCatalogueDetail } from './components/organism/GameCatalogueDetail';
+import { ContainerGameCatalogueListComponent } from './components/pages/ContainerGameCatalogueList/ContainerGameCatalogueList.component';
+import './App.css';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<GameCatalogueList/>} />
-                <Route path="/game/:id" element={<GameCatalogueDetail />} />
-            </Routes>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ContainerGameCatalogueListComponent />} />
+          <Route path="/game/:id" element={<GameCatalogueDetail />} />
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }
