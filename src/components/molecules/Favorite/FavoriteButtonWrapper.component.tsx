@@ -7,7 +7,7 @@ interface FavoriteButtonProps {
   game: GameCatalogueItem;
 }
 
-export const FavoriteButtonWrapper: React.FC<FavoriteButtonProps> = ({
+export const FavoriteButtonWrapperComponent: React.FC<FavoriteButtonProps> = ({
   game,
 }) => {
   const buttonRef = useRef<HTMLElement>(null);
