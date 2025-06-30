@@ -5,14 +5,12 @@ export interface CardProps {
   thumbnail: string;
   studio: string;
   rating: number;
-  url: string;
 }
 
 export const Card = ({
   title,
   studio,
   thumbnail,
-  url,
   rating,
 }: CardProps): React.ReactElement => {
   return (
@@ -31,14 +29,6 @@ export const Card = ({
           <p className="text-gray-400">Rating: {rating}</p>
         </div>
       </section>
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-auto inline-block text-center py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-      >
-        Play Demo
-      </a>
     </div>
   );
 };

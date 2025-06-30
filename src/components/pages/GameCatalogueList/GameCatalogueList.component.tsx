@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useGames } from '../../../hooks/useGames';
 import { Card } from '../../atoms/Card';
 import { GameCatalogueItem } from '../../../interfaces/Game';
@@ -41,19 +42,24 @@ export const GameCatalogueList: React.FC = () => {
       {data?.pages.map(
         (page: { items: GameCatalogueItem[] }, pageIndex: number) =>
           page.items.map((game: GameCatalogueItem, idx: number) => {
-            const { id, title, studio, thumbnail, demo_url, rating } = game;
+            const { id, title, studio, thumbnail, rating } = game;
             const isLast =
               pageIndex === data.pages.length - 1 &&
               idx === page.items.length - 1;
             return (
               <div key={id} ref={isLast ? lastGameRef : null}>
-                <Card
-                  rating={rating}
-                  studio={studio}
-                  title={title}
-                  thumbnail={thumbnail}
-                  url={demo_url}
-                />
+                <Link
+                  to={`/game/${game.id}`}
+                  state={{ game }}
+                  className="block hover:opacity-90"
+                >
+                  <Card
+                    rating={rating}
+                    studio={studio}
+                    title={title}
+                    thumbnail={thumbnail}
+                  />
+                </Link>
               </div>
             );
           }),
