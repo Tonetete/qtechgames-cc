@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useGameDetail } from '../../../hooks/useGames';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { useSafeNavigation } from '../../../hooks/useNavigation';
 import { Button } from '../../atoms/Button/Button';
+import { FavoriteButtonWrapper } from '../../molecules/Favorite/FavoriteButtonWrapper';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
   const [game, setGame] = useState<GameCatalogueItem | null>(null);
@@ -45,11 +46,12 @@ export const GameCatalogueDetail = (): React.ReactElement => {
           alt={game.title}
           className="w-full h-64 object-cover lg:w-1/2 lg:h-auto"
         />
-
         <div className="p-6 flex-1 space-y-4">
-          <h1 className="text-2xl font-bold">{game.title}</h1>
+          <div className="flex justify-between">
+            <h1 className="text-2xl font-bold">{game.title}</h1>
+            <FavoriteButtonWrapper game={game} />
+          </div>
           <p className="text-gray-500">{game.studio}</p>
-
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <span className="font-semibold">Rating:</span>{' '}
@@ -70,12 +72,10 @@ export const GameCatalogueDetail = (): React.ReactElement => {
               {game.has_jackpot ? 'Yes' : 'No'}
             </div>
           </div>
-
           <div className="space-y-2">
             <h2 className="text-lg font-semibold">Description</h2>
             <p className="text-gray-700">{game.description}</p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold">Categories</h3>
@@ -95,7 +95,6 @@ export const GameCatalogueDetail = (): React.ReactElement => {
               </ul>
             </div>
           </div>
-
           <div className="space-y-2">
             <h3 className="font-semibold">Supported Platforms</h3>
             <div className="flex flex-wrap gap-2">

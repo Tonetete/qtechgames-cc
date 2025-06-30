@@ -7,13 +7,17 @@ export interface State {
   favoriteGamesList: GameCatalogueItem[];
 }
 
-export const useGameListStore = create(
+const loadFavoriteGamesList = () => {
+  return localStorage.getItem('favoriteGamesList')
+    ? JSON.parse(localStorage.getItem('favoriteGamesList')!)
+    : [];
+};
+
+export const useGameStore = create(
   combine(
     {
       gamesList: [],
-      favoriteGamesList: localStorage.getItem('favoriteGamesList')
-        ? JSON.parse(localStorage.getItem('favoriteGamesList')!)
-        : [],
+      favoriteGamesList: loadFavoriteGamesList(),
     } as State,
     (set) => {
       return {
