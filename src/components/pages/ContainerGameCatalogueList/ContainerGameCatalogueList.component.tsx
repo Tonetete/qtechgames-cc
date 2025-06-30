@@ -2,9 +2,12 @@ import React, { useCallback, useRef, useState } from 'react';
 import { GameCatalogueList } from '../../organism/GameCatalogueList';
 import { InputSearchBox } from '../../molecules/InputSearchBox/InputSearchBox';
 import { useGames } from '../../../hooks/useGames';
+import { useDebounce } from '../../../hooks/useDebounce';
 
 export const ContainerGameCatalogueListComponent = () => {
   const [filter, setFilter] = useState<string>('');
+  const debouncedFilter = useDebounce(filter, 300);
+
   const {
     data,
     isLoading,
@@ -12,7 +15,7 @@ export const ContainerGameCatalogueListComponent = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGames(filter);
+  } = useGames(debouncedFilter);
 
   const handleSearchFilter = useCallback((value: string) => {
     setFilter(value);

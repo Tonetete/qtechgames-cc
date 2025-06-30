@@ -15,7 +15,6 @@ const fetchPage = async ({ pageParam = 1, searchTerm = '' }) => {
     const res = await fetch(PATH);
     if (!res.ok) throw new Error('Failed to fetch games');
     allGames = await res.json();
-    console.log(allGames);
   }
 
   if (!allGames) {

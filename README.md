@@ -10,9 +10,9 @@ Please use as source of data `public/games.json`
 
 ### 1. Game Catalog Page (`/`)
 
-- Display a list of games fetched from (`/public/games.json`), you can create a backend or consume from the file directly.
-- Show: game **title**, **studio**, **thumbnail**, and **rating** (0–5 stars)
-- Add a **search bar** to filter games by title or studio name
+- ✅ Display a list of games fetched from (`/public/games.json`), you can create a backend or consume from the file directly.
+- ✅ Show: game **title**, **studio**, **thumbnail**, and **rating** (0–5 stars)
+- ✅ Add a **search bar** to filter games by title or studio name
 - Add a **toggle** to view only favorite games
 
 ### 2. Game Detail Page (`/games/:id`)
