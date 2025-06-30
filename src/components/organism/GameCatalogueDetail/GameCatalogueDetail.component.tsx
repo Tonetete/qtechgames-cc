@@ -1,33 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGameDetail } from '../../../hooks/useGames';
 import { GameCatalogueItem } from '../../../interfaces/Game';
-import { useSafeNavigation } from '../../../hooks/useNavigation';
-import { Button } from '../../atoms/Button/Button';
-import { FavoriteButtonWrapper } from '../../molecules/Favorite/FavoriteButtonWrapper';
+import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
+import { RatingStars } from '../../molecules/RatingStars/RatingStars';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
   const [game, setGame] = useState<GameCatalogueItem | null>(null);
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const { goBack } = useSafeNavigation();
 
-  // If user came via Link state, use that as initialData
-  const gameDetailState = location.state?.game;
-
-  const {
-    data: fetchedGame,
-    isLoading,
-    error,
-  } = useGameDetail(id!, {
-    enabled: !gameDetailState,
-  });
+  const { data: fetchedGame, isLoading, error } = useGameDetail(id!);
 
   useEffect(() => {
-    if (gameDetailState || fetchedGame) {
-      setGame(gameDetailState || fetchedGame);
+    if (fetchedGame) {
+      setGame(fetchedGame);
     }
-  }, [fetchedGame, gameDetailState]);
+  }, [fetchedGame]);
 
   if (isLoading) return <div className="p-8 text-center">Loading game…</div>;
   if (error)
@@ -38,8 +26,6 @@ export const GameCatalogueDetail = (): React.ReactElement => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <Button title="← Back to catalogue" handler={goBack} />
-
       <div className="bg-white rounded-2xl shadow overflow-hidden lg:flex">
         <img
           src={game.thumbnail}
@@ -49,13 +35,13 @@ export const GameCatalogueDetail = (): React.ReactElement => {
         <div className="p-6 flex-1 space-y-4">
           <div className="flex justify-between">
             <h1 className="text-2xl font-bold">{game.title}</h1>
-            <FavoriteButtonWrapper game={game} />
+            <FavoriteButtonWrapperComponent game={game} />
           </div>
           <p className="text-gray-500">{game.studio}</p>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-semibold">Rating:</span>{' '}
-              {game.rating.toFixed(2)}/5
+              <span className="font-semibold">Rate this game:</span>{' '}
+              <RatingStars gameId={game.id} initialRating={game.rating} />
             </div>
             <div>
               <span className="font-semibold">Type:</span> {game.type}
