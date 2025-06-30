@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ButtonComponent } from '../../atoms/Button/Button.component';
+import { useSafeNavigation } from '../../../hooks/useNavigation';
 
-interface TopBarProps {
-  mode?: 'search' | 'back';
-  onSearch?: (query: string) => void;
-}
+interface TopBarProps {}
 
 export const TopBar: React.FC<TopBarProps> = () => {
   const location = useLocation();
+  const { goBack } = useSafeNavigation();
 
   return (
-    <header className="w-full bg-white shadow p-4 flex items-center justify-end min-h-[72px]">
+    <header className="w-full bg-white shadow p-4 flex items-center justify-end min-h-[72px] bg-gray-700 z-10 shadow-md">
       {location.pathname === '/' && (
         <Link
           to={`/favorites`}
@@ -18,6 +18,12 @@ export const TopBar: React.FC<TopBarProps> = () => {
         >
           See favorites
         </Link>
+      )}
+      {location.pathname.includes(`/game`) && (
+        <ButtonComponent title="← Back to catalogue" handler={goBack} />
+      )}
+      {location.pathname.includes(`/favorites`) && (
+        <ButtonComponent title="← Back to catalogue" handler={goBack} />
       )}
     </header>
   );
