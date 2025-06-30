@@ -1,8 +1,8 @@
 export type GameType = 'roulette' | 'crash' | string;
 
-export type SupportedPlatform = 'mobile' | 'tablet' | string
+export type SupportedPlatform = 'mobile' | 'tablet' | string;
 
-export type Volatility = 'low' | 'medium' | 'high'
+export type Volatility = 'low' | 'medium' | 'high';
 
 export interface GameCatalogueItem {
   id: string;
@@ -22,5 +22,3 @@ export interface GameCatalogueItem {
   provider_game_id: string;
   supported_platforms: Array<SupportedPlatform>;
 }
-
-export type GameCatalogue = Array<GameCatalogueItem>

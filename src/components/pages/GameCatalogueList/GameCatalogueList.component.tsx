@@ -1,63 +1,64 @@
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useGames } from '../../../hooks/useGames';
-import { Card } from "../../atoms/Card"
-import {GameCatalogueItem} from "../../../interfaces/Game";
+import { Card } from '../../atoms/Card';
+import { GameCatalogueItem } from '../../../interfaces/Game';
 
 export const GameCatalogueList: React.FC = () => {
-    const {
-        data,
-        isLoading,
-        error,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useGames();
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGames();
 
-    const intObserver: React.RefObject<IntersectionObserver | null> = useRef<IntersectionObserver | null>(null);
-    const lastGameRef: (gameElement: HTMLDivElement) => void = useCallback(
-        (gameElement: HTMLDivElement) => {
-            if (isFetchingNextPage) return;
-            if (intObserver.current) intObserver.current.disconnect();
+  const intObserver: React.RefObject<IntersectionObserver | null> =
+    useRef<IntersectionObserver | null>(null);
+  const lastGameRef: (gameElement: HTMLDivElement) => void = useCallback(
+    (gameElement: HTMLDivElement) => {
+      if (isFetchingNextPage) return;
+      if (intObserver.current) intObserver.current.disconnect();
 
-            const observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasNextPage) {
-                    fetchNextPage();
-                }
-            });
-            intObserver.current = observer;
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      intObserver.current = observer;
 
-            if (gameElement) intObserver.current.observe(gameElement);
-        },
-        [isFetchingNextPage, fetchNextPage, hasNextPage]
-    );
+      if (gameElement) intObserver.current.observe(gameElement);
+    },
+    [isFetchingNextPage, fetchNextPage, hasNextPage],
+  );
 
-    if (isLoading) return <div>Loading games...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div>Loading games...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-    console.log("data", data)
-    return (
-        <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {data?.pages.map((page: {items: GameCatalogueItem[]}, pageIndex: number) =>
-                page.items.map((game: GameCatalogueItem, idx: number) => {
-                    const {id, title, studio, thumbnail, demo_url, rating} = game
-                    const isLast =
-                        pageIndex === data.pages.length - 1 && idx === page.items.length - 1;
-                    return (
-                        <div
-                            ref={isLast ? lastGameRef : null}
-                        >
-                            <Card
-                                key={id}
-                                rating={rating}
-                                studio={studio}
-                                title={title}
-                                thumbnail={thumbnail}
-                                url={demo_url} />
-                        </div>
-                    );
-                })
-            )}
-            {isFetchingNextPage && <div>Loading more...</div>}
-        </main>
-    );
+  console.log('data', data);
+  return (
+    <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {data?.pages.map(
+        (page: { items: GameCatalogueItem[] }, pageIndex: number) =>
+          page.items.map((game: GameCatalogueItem, idx: number) => {
+            const { id, title, studio, thumbnail, demo_url, rating } = game;
+            const isLast =
+              pageIndex === data.pages.length - 1 &&
+              idx === page.items.length - 1;
+            return (
+              <div key={id} ref={isLast ? lastGameRef : null}>
+                <Card
+                  rating={rating}
+                  studio={studio}
+                  title={title}
+                  thumbnail={thumbnail}
+                  url={demo_url}
+                />
+              </div>
+            );
+          }),
+      )}
+      {isFetchingNextPage && <div>Loading more...</div>}
+    </main>
+  );
 };
