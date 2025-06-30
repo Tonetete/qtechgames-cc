@@ -1,24 +1,57 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { GameCatalogueDetail } from './components/organism/GameCatalogueDetail';
-import { ContainerGameCatalogueListComponent } from './components/pages/ContainerGameCatalogueList/ContainerGameCatalogueList.component';
-import { GameCatalogueFavoriteList } from './components/organism/GameCatalogueFavoriteList';
+import React, { Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TopBar } from './components/molecules/TopBar/TopBar';
-import './App.css';
 
-const queryClient = new QueryClient();
+// Lazy load route components
+const ContainerGameCatalogueListComponent = React.lazy(() =>
+  import(
+    './components/pages/ContainerGameCatalogueList/ContainerGameCatalogueList'
+  ).then((module) => ({ default: module.ContainerGameCatalogueList })),
+);
+
+const GameCatalogueDetail = React.lazy(() =>
+  import(
+    './components/organism/GameCatalogueDetail/GameCatalogueDetail.component'
+  ).then((module) => ({ default: module.GameCatalogueDetail })),
+);
+
+const GameCatalogueFavoriteList = React.lazy(() =>
+  import(
+    './components/organism/GameCatalogueFavoriteList/GameCatalogueFavoriteList.component'
+  ).then((module) => ({ default: module.GameCatalogueFavoriteList })),
+);
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen p-8">
+    <div className="animate-pulse text-xl">Loading...</div>
+  </div>
+);
 
 function App() {
+  const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <TopBar />
-        <Routes>
-          <Route path="/" element={<ContainerGameCatalogueListComponent />} />
-          <Route path="/game/:id" element={<GameCatalogueDetail />} />
-          <Route path="/favorites" element={<GameCatalogueFavoriteList />} />
-        </Routes>
+        <div className="grid grid-rows-[auto_1fr] h-screen">
+          <TopBar />
+          <div className="overflow-auto pt-4">
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<ContainerGameCatalogueListComponent />}
+                />
+                <Route path="/game/:id" element={<GameCatalogueDetail />} />
+                <Route
+                  path="/favorites"
+                  element={<GameCatalogueFavoriteList />}
+                />
+              </Routes>
+            </Suspense>
+          </div>
+        </div>
       </BrowserRouter>
     </QueryClientProvider>
   );

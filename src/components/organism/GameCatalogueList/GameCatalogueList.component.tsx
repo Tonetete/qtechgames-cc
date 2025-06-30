@@ -46,7 +46,6 @@ export const GameCatalogueList = ({
               <div key={id} ref={isLast ? lastGameRef : null}>
                 <Link
                   to={`/game/${game.id}`}
-                  state={{ game }}
                   className="block hover:opacity-90"
                 >
                   <Card
