@@ -1,34 +1,72 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { GameCatalogueItem } from '../interfaces/Game';
 
-let allGames: GameCatalogueItem[] | null = null;
-const pageSize = 50;
+const PAGE_SIZE = 50;
+const PATH = '/games.json';
 
-const fetchPage = async ({ pageParam = 1 }) => {
+let allGames: GameCatalogueItem[] | null = null;
+
+const fetchPage = async ({ pageParam = 1, searchTerm = '' }) => {
   if (!allGames) {
-    const res = await fetch('/games.json');
+    const res = await fetch(PATH);
     if (!res.ok) throw new Error('Failed to fetch games');
     allGames = await res.json();
+    console.log(allGames);
   }
 
   if (!allGames) {
     throw new Error('Failed to load games data');
   }
 
-  const start = pageParam * pageSize;
-  const end = start + pageSize;
-  const items = allGames.slice(start, end);
-  const nextPage = end < allGames.length ? pageParam + 1 : null;
+  const filtered = searchTerm
+    ? allGames.filter(
+        (g) =>
+          g.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          g.studio.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+    : allGames;
+
+  const start = pageParam * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const items = filtered.slice(start, end);
+  const nextPage = end < filtered.length ? pageParam + 1 : null;
+
   return { items, nextPage };
 };
 
-export const useGames = () => {
+async function fetchGameById(id: string): Promise<GameCatalogueItem> {
+  const res = await fetch(PATH);
+  if (!res.ok) throw new Error('Fetch failed');
+  const all: GameCatalogueItem[] = await res.json();
+  const found = all.find((g) => g.id === id);
+  if (!found) throw new Error('Not found');
+  return found;
+}
+
+export const useGameDetail = (
+  id: string,
+  options?: Partial<UseQueryOptions<GameCatalogueItem, Error>>,
+) => {
+  return useQuery({
+    queryKey: ['game', id],
+    queryFn: () => fetchGameById(id),
+    staleTime: Infinity,
+    ...options,
+  });
+};
+
+export const useGames = (searchTerm: string) => {
   return useInfiniteQuery<
     { items: GameCatalogueItem[]; nextPage: number | null },
     Error
   >({
-    queryKey: ['games'],
-    queryFn: ({ pageParam }) => fetchPage({ pageParam: pageParam as number }),
+    queryKey: ['games', searchTerm],
+    queryFn: ({ pageParam }) =>
+      fetchPage({ pageParam: pageParam as number, searchTerm }),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     staleTime: Infinity,
     initialPageParam: 0,
