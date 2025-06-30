@@ -1,10 +1,12 @@
 import { combine } from 'zustand/middleware';
 import { create } from 'zustand/react';
 import { GameCatalogueItem } from '../interfaces/Game';
+import { API_URL_GAME_RATING } from '../constants/constants';
 
 export interface State {
   gamesList: GameCatalogueItem[];
   favoriteGamesList: GameCatalogueItem[];
+  updateGameRating: (gameId: string, rating: number) => void;
 }
 
 const loadFavoriteGamesList = () => {
@@ -17,9 +19,10 @@ export const useGameStore = create(
   combine(
     {
       gamesList: [],
+      updateGameRating: () => {},
       favoriteGamesList: loadFavoriteGamesList(),
     } as State,
-    (set) => {
+    (set, get) => {
       return {
         setGamesList: (
           nextGamesList:
@@ -53,6 +56,50 @@ export const useGameStore = create(
               favoriteGamesList,
             };
           }),
+        updateGameRating: async (gameId: string, rating: number) => {
+          try {
+            const response = await fetch(
+              `${API_URL_GAME_RATING.replace(':id', gameId)}`,
+              {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ rating }),
+              },
+            );
+
+            if (!response.ok) {
+              throw new Error('Failed to update rating');
+            }
+
+            const { favoriteGamesList } = get();
+
+            // Update ratings in favoritesList if needed
+            const updatedFavorites = favoriteGamesList.map((game) => {
+              if (game.id === gameId) {
+                return { ...game, rating };
+              }
+              return game;
+            });
+
+            // Update store state
+            set({
+              favoriteGamesList: updatedFavorites,
+            });
+
+            // Also update localStorage for persistence
+            localStorage.setItem(
+              'favoriteGamesList',
+              JSON.stringify(updatedFavorites),
+            );
+
+            return true;
+          } catch (error) {
+            console.error('Error updating game rating:', error);
+            return false;
+          }
+        },
       };
     },
   ),
