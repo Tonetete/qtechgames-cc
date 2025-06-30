@@ -1,19 +1,16 @@
 import React, { useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useGames } from '../../../hooks/useGames';
 import { Card } from '../../atoms/Card';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 
-export const GameCatalogueList: React.FC = () => {
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useGames();
-
+export const GameCatalogueList = ({
+  error,
+  data,
+  isFetchingNextPage,
+  fetchNextPage,
+  hasNextPage,
+  isLoading,
+}: any) => {
   const intObserver: React.RefObject<IntersectionObserver | null> =
     useRef<IntersectionObserver | null>(null);
   const lastGameRef: (gameElement: HTMLDivElement) => void = useCallback(
@@ -36,9 +33,8 @@ export const GameCatalogueList: React.FC = () => {
   if (isLoading) return <div>Loading games...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  console.log('data', data);
   return (
-    <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    <>
       {data?.pages.map(
         (page: { items: GameCatalogueItem[] }, pageIndex: number) =>
           page.items.map((game: GameCatalogueItem, idx: number) => {
@@ -65,6 +61,6 @@ export const GameCatalogueList: React.FC = () => {
           }),
       )}
       {isFetchingNextPage && <div>Loading more...</div>}
-    </main>
+    </>
   );
 };

@@ -1,39 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useGameDetail } from '../../../hooks/useGames';
 import { GameCatalogueItem } from '../../../interfaces/Game';
-import { useQuery } from '@tanstack/react-query';
+import { useSafeNavigation } from '../../../hooks/useNavigation';
+import { Button } from '../../atoms/Button/Button';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
+  const [game, setGame] = useState<GameCatalogueItem | null>(null);
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const location = useLocation();
+  const { goBack } = useSafeNavigation();
 
-  const passedGame = location.state?.game;
+  // If user came via Link state, use that as initialData
+  const gameDetailState = location.state?.game;
 
-  const [game, setGame] = useState<GameCatalogueItem | undefined>(passedGame);
-  const [loading, setLoading] = useState(!passedGame);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: fetchedGame,
+    isLoading,
+    error,
+  } = useGameDetail(id!, {
+    enabled: !gameDetailState,
+  });
 
   useEffect(() => {
-    if (passedGame) return;
+    if (gameDetailState || fetchedGame) {
+      setGame(gameDetailState || fetchedGame);
+    }
+  }, [fetchedGame, gameDetailState]);
 
-    setLoading(true);
-    // TODO: implement query mechanism by id param to get game details via react query
-    // if by checking the global state, it's not present, then fetch the game details from the API
-  }, [id, passedGame]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading game data!</div>;
+  if (isLoading) return <div className="p-8 text-center">Loading game…</div>;
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-600">Error: {error.message}</div>
+    );
   if (!game) return <div>Game not found!</div>;
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-indigo-600 hover:underline"
-      >
-        ← Back to catalogue
-      </button>
+      <Button title="← Back to catalogue" handler={goBack} />
 
       <div className="bg-white rounded-2xl shadow overflow-hidden lg:flex">
         <img
@@ -105,14 +109,13 @@ export const GameCatalogueDetail = (): React.ReactElement => {
               ))}
             </div>
           </div>
-
           <a
             href={game.demo_url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block w-full text-center py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
           >
-            Play Full Demo
+            Play
           </a>
         </div>
       </div>
