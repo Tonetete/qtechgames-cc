@@ -41,7 +41,7 @@ export const GameCatalogueDetail = (): React.ReactElement => {
         queryClient.invalidateQueries({ queryKey: ['game', game.id] });
         queryClient.invalidateQueries({ queryKey: ['games'] });
       })
-      .catch((error) => {
+      .catch(() => {
         throw new Error('Failed to update rating');
       });
   }, [rating]);

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { GameCatalogueList } from '../../organism/GameCatalogueList';
 import { InputSearchBoxComponent } from '../../molecules/InputSearchBox/InputSearchBox.component';
 import { useGames, useDebounce } from '../../../hooks';

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useGameStore } from '../../../store/gameStore';
 
 interface RatingStarsProps {
   gameId: string;

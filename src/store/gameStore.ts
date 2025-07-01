@@ -1,7 +1,6 @@
 import { combine } from 'zustand/middleware';
 import { create } from 'zustand/react';
 import { GameCatalogueItem } from '../interfaces/Game';
-import { API_URL_GAME_RATING } from '../constants/constants';
 
 export interface State {
   gamesList: GameCatalogueItem[];
