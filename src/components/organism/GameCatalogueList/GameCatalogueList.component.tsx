@@ -1,7 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../../atoms/Card';
 import { GameCatalogueItem } from '../../../interfaces/Game';
+import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll';
 
 export const GameCatalogueList = ({
   error,
@@ -11,24 +12,11 @@ export const GameCatalogueList = ({
   hasNextPage,
   isLoading,
 }: any) => {
-  const intObserver: React.RefObject<IntersectionObserver | null> =
-    useRef<IntersectionObserver | null>(null);
-  const lastGameRef: (gameElement: HTMLDivElement) => void = useCallback(
-    (gameElement: HTMLDivElement) => {
-      if (isFetchingNextPage) return;
-      if (intObserver.current) intObserver.current.disconnect();
-
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      });
-      intObserver.current = observer;
-
-      if (gameElement) intObserver.current.observe(gameElement);
-    },
-    [isFetchingNextPage, fetchNextPage, hasNextPage],
-  );
+  const lastGameRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   if (isLoading) return <div>Loading games...</div>;
   if (error) return <div>Error: {error.message}</div>;
