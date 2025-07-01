@@ -59,7 +59,7 @@ describe('GameCatalogueFavoriteList Integration Test', () => {
     const links = screen.queryAllByRole('link');
     expect(links).toHaveLength(0);
 
-    const section = document.querySelector('#favorite-game-list-section');
-    expect(section?.children).toHaveLength(0);
+    const noFavorites = screen.getByText('There are no favorite games yet.');
+    expect(noFavorites).toBeInTheDocument();
   });
 });

@@ -22,7 +22,6 @@ const GameCatalogueFavoriteList = React.lazy(() =>
   ).then((module) => ({ default: module.GameCatalogueFavoriteList })),
 );
 
-// Loading fallback component
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen p-8">
     <div className="animate-pulse text-xl">Loading...</div>

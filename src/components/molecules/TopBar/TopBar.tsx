@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../../atoms/Button/Button';
+import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useSafeNavigation } from '../../../hooks/useNavigation';
 
 interface TopBarProps {}
@@ -8,22 +10,24 @@ interface TopBarProps {}
 export const TopBar: React.FC<TopBarProps> = () => {
   const location = useLocation();
   const { goBack } = useSafeNavigation();
+  const { t } = useTranslation();
 
   return (
     <header className="w-full p-4 flex items-center justify-end min-h-[72px] bg-gray-700 z-10 shadow-md">
+      <LanguageSwitcher />
       {location.pathname === '/' && (
         <Link
           to={`/favorites`}
           className="inline-block text-center py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
         >
-          See favorites
+          {t('navigation.seeFavorites')}
         </Link>
       )}
       {location.pathname.includes(`/game`) && (
-        <Button title="← Back to catalogue" handler={goBack} />
+        <Button title={t('navigation.back')} handler={goBack} />
       )}
       {location.pathname.includes(`/favorites`) && (
-        <Button title="← Back to catalogue" handler={goBack} />
+        <Button title={t('navigation.back')} handler={goBack} />
       )}
     </header>
   );

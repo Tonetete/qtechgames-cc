@@ -1,0 +1,15 @@
+{
+  "navigation": {
+    "back": "← Back to catalogue",
+    "seeFavorites": "See favorites",
+    "play": "Play"
+  },
+  "search": {
+    "placeholder": "Search by title or studio..."
+  },
+  "loading": {
+    "games": "Loading games...",
+    "more": "Loading more..."
+  },
+  "noFavorites": "There are no favorite games yet."
+}

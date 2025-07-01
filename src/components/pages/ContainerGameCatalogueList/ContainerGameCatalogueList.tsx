@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GameCatalogueList } from '../../organism/GameCatalogueList';
 import { InputSearchBoxComponent } from '../../molecules/InputSearchBox/InputSearchBox.component';
 import { useGames, useDebounce } from '../../../hooks';
+import { PlaceHolderText } from '../../atoms/PlaceHolderText';
 
 export const ContainerGameCatalogueList = () => {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<string>('');
   const debouncedFilter = useDebounce(filter, 300);
 
@@ -20,11 +23,14 @@ export const ContainerGameCatalogueList = () => {
     setFilter(value);
   }, []);
 
+  if (isLoading) return <PlaceHolderText title={t('loading.games')} />;
+  if (error) return <PlaceHolderText title={`Error: ${error.message}`} />;
+
   return (
     <main className="flex flex-col h-full">
       <section id="filter-section" className="bg-white z-10 p-4 shadow-md">
         <InputSearchBoxComponent
-          placeholder="Search by title or studio..."
+          placeholder={t('search.placeholder')}
           handleChange={(event) => handleSearchFilter(event.target.value)}
         />
       </section>
@@ -34,8 +40,6 @@ export const ContainerGameCatalogueList = () => {
       >
         <GameCatalogueList
           data={data}
-          isLoading={isLoading}
-          error={error}
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}

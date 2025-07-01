@@ -1,25 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Card } from '../../atoms/Card';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { useInfiniteScroll } from '../../../hooks';
 
+interface GameCatalogueListProps {
+  data:
+    | {
+        pages: { items: GameCatalogueItem[] }[];
+      }
+    | undefined;
+  isFetchingNextPage: boolean;
+  fetchNextPage: () => void;
+  hasNextPage: boolean | undefined;
+}
+
 export const GameCatalogueList = ({
-  error,
   data,
   isFetchingNextPage,
   fetchNextPage,
   hasNextPage,
-  isLoading,
-}: any) => {
+}: GameCatalogueListProps) => {
+  const { t } = useTranslation();
   const lastGameRef = useInfiniteScroll({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
   });
-
-  if (isLoading) return <div>Loading games...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <>
@@ -47,7 +55,7 @@ export const GameCatalogueList = ({
             );
           }),
       )}
-      {isFetchingNextPage && <div>Loading more...</div>}
+      {isFetchingNextPage && <div>{t('loading.more')}</div>}
     </>
   );
 };

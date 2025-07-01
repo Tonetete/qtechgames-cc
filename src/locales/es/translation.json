@@ -1,0 +1,15 @@
+{
+  "navigation": {
+    "back": "← Volver al catálogo",
+    "seeFavorites": "Ver favoritos",
+    "play": "Jugar"
+  },
+  "search": {
+    "placeholder": "Buscar por título o estudio..."
+  },
+  "loading": {
+    "games": "Cargando juegos...",
+    "more": "Cargando más..."
+  },
+  "noFavorites": "Aún no hay juegos favoritos en la lista."
+}

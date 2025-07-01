@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useGameDetail } from '../../../hooks';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
 import { RatingStars } from '../../molecules/RatingStars/RatingStars';
 import { useGameStore } from '../../../store/gameStore';
 import { API_URL_GAME_RATING } from '../../../constants/constants';
-import { useQueryClient } from '@tanstack/react-query';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
+  const { t } = useTranslation();
   const [game, setGame] = useState<GameCatalogueItem | null>(null);
   const [rating, setRating] = useState<number | null>(game?.rating || null);
   const { id } = useParams<{ id: string }>();
@@ -133,7 +135,7 @@ export const GameCatalogueDetail = (): React.ReactElement => {
             rel="noopener noreferrer"
             className="inline-block w-full text-center py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
           >
-            Play
+            {t('navigation.play')}
           </a>
         </div>
       </div>
