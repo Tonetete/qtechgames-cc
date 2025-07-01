@@ -1,4 +1,5 @@
 import React from 'react';
+import { RatingStars } from '../../molecules/RatingStars';
 
 export interface CardProps {
   title: string;
@@ -25,8 +26,9 @@ export const Card = ({
         <div className="mt-2 flex justify-between items-center text-sm">
           <p className="text-gray-400">Studio: {studio}</p>
         </div>
-        <div className="mt-2 flex justify-between items-center text-sm">
-          <p className="text-gray-400">Rating: {rating}</p>
+        <div className="mt-2 flex justify-start gap-1 text-sm">
+          <p className="text-gray-400">Rating: </p>
+          <RatingStars initialRating={rating} size="small" readOnly={true} />
         </div>
       </section>
     </div>

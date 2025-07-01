@@ -1,19 +1,31 @@
+// src/components/molecules/RatingStars/RatingStars.tsx
 import React, { useState } from 'react';
 
 interface RatingStarsProps {
-  gameId: string;
+  gameId?: string; // Make optional
   initialRating: number;
-  onUpdateRating: (rating: number) => void;
+  onUpdateRating?: (rating: number) => void; // Make optional
+  readOnly?: boolean; // Add this
+  size?: 'small' | 'medium' | 'large'; // Add this
 }
 
 export const RatingStars: React.FC<RatingStarsProps> = ({
   initialRating,
-  onUpdateRating,
+  onUpdateRating = () => {}, // Default no-op function
+  readOnly = false,
+  size = 'medium',
 }: RatingStarsProps) => {
   const [rating, setRating] = useState(Math.round(initialRating));
   const [hover, setHover] = useState(0);
 
+  const sizeClasses = {
+    small: 'w-4 h-4',
+    medium: 'w-6 h-6',
+    large: 'w-8 h-8',
+  };
+
   const handleClick = (selectedRating: number) => {
+    if (readOnly) return;
     setRating(selectedRating);
     onUpdateRating(selectedRating);
   };
@@ -27,13 +39,16 @@ export const RatingStars: React.FC<RatingStarsProps> = ({
           <button
             key={index}
             type="button"
-            className="focus:outline-none"
+            className={`focus:outline-none ${
+              readOnly ? 'cursor-default' : 'cursor-pointer'
+            }`}
             onClick={() => handleClick(starValue)}
-            onMouseEnter={() => setHover(starValue)}
-            onMouseLeave={() => setHover(0)}
+            onMouseEnter={() => !readOnly && setHover(starValue)}
+            onMouseLeave={() => !readOnly && setHover(0)}
+            disabled={readOnly}
           >
             <svg
-              className={`w-6 h-6 ${
+              className={`${sizeClasses[size]} ${
                 starValue <= (hover || rating)
                   ? 'text-yellow-400'
                   : 'text-gray-300'
