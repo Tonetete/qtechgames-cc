@@ -1,8 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { GameCatalogueList } from '../../organism/GameCatalogueList';
 import { InputSearchBoxComponent } from '../../molecules/InputSearchBox/InputSearchBox.component';
-import { useGames } from '../../../hooks/useGames';
-import { useDebounce } from '../../../hooks/useDebounce';
+import { useGames, useDebounce } from '../../../hooks';
 
 export const ContainerGameCatalogueList = () => {
   const [filter, setFilter] = useState<string>('');

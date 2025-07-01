@@ -4,13 +4,14 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ContainerGameCatalogueList } from './ContainerGameCatalogueList';
-import * as useGamesHook from '../../../hooks/useGames';
 import { mockGameListData } from '../../../tests/__mocks__/GameListData.mock';
+import { useGames } from '../../../hooks';
 
-jest.mock('../../../hooks/useGames');
-const mockUseGames = useGamesHook.useGames as jest.MockedFunction<
-  typeof useGamesHook.useGames
->;
+jest.mock('../../../hooks', () => ({
+  ...jest.requireActual('../../../hooks'),
+  useGames: jest.fn(),
+}));
+const mockUseGames = useGames as jest.MockedFunction<typeof useGames>;
 
 describe('ContainerGameCatalogueList Integration Test', () => {
   let queryClient: QueryClient;

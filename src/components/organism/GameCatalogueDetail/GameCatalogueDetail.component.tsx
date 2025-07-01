@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGameDetail } from '../../../hooks/useGames';
+import { useGameDetail } from '../../../hooks';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
 import { RatingStars } from '../../molecules/RatingStars/RatingStars';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../../atoms/Card';
 import { GameCatalogueItem } from '../../../interfaces/Game';
-import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll';
+import { useInfiniteScroll } from '../../../hooks';
 
 export const GameCatalogueList = ({
   error,
