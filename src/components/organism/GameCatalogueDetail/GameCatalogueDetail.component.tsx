@@ -1,21 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGameDetail } from '../../../hooks/useGames';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
 import { RatingStars } from '../../molecules/RatingStars/RatingStars';
+import { useGameStore } from '../../../store/gameStore';
+import { API_URL_GAME_RATING } from '../../../constants/constants';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
   const [game, setGame] = useState<GameCatalogueItem | null>(null);
+  const [rating, setRating] = useState<number | null>(game?.rating || null);
   const { id } = useParams<{ id: string }>();
+  const { updateGameRating } = useGameStore();
+  const queryClient = useQueryClient();
 
   const { data: fetchedGame, isLoading, error } = useGameDetail(id!);
+
+  const onUpdateRating = useCallback((newRating: number) => {
+    setRating(newRating);
+    updateGameRating(id!, newRating);
+  }, []);
 
   useEffect(() => {
     if (fetchedGame) {
       setGame(fetchedGame);
     }
   }, [fetchedGame]);
+
+  useEffect(() => {
+    if (!game || !rating) return;
+    fetch(`${API_URL_GAME_RATING.replace(':id', game.id)}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rating }),
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['game', game.id] });
+        queryClient.invalidateQueries({ queryKey: ['games'] });
+      })
+      .catch((error) => {
+        throw new Error('Failed to update rating');
+      });
+  }, [rating]);
 
   if (isLoading) return <div className="p-8 text-center">Loading game…</div>;
   if (error)
@@ -41,7 +70,11 @@ export const GameCatalogueDetail = (): React.ReactElement => {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <span className="font-semibold">Rate this game:</span>{' '}
-              <RatingStars gameId={game.id} initialRating={game.rating} />
+              <RatingStars
+                gameId={game.id}
+                initialRating={game.rating}
+                onUpdateRating={onUpdateRating}
+              />
             </div>
             <div>
               <span className="font-semibold">Type:</span> {game.type}

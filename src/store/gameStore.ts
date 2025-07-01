@@ -58,21 +58,6 @@ export const useGameStore = create(
           }),
         updateGameRating: async (gameId: string, rating: number) => {
           try {
-            const response = await fetch(
-              `${API_URL_GAME_RATING.replace(':id', gameId)}`,
-              {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ rating }),
-              },
-            );
-
-            if (!response.ok) {
-              throw new Error('Failed to update rating');
-            }
-
             const { favoriteGamesList } = get();
 
             // Update ratings in favoritesList if needed

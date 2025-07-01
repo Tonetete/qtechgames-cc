@@ -4,19 +4,19 @@ import { useGameStore } from '../../../store/gameStore';
 interface RatingStarsProps {
   gameId: string;
   initialRating: number;
+  onUpdateRating: (rating: number) => void;
 }
 
 export const RatingStars: React.FC<RatingStarsProps> = ({
-  gameId,
   initialRating,
+  onUpdateRating,
 }: RatingStarsProps) => {
   const [rating, setRating] = useState(Math.round(initialRating));
   const [hover, setHover] = useState(0);
-  const { updateGameRating } = useGameStore();
 
   const handleClick = (selectedRating: number) => {
     setRating(selectedRating);
-    updateGameRating(gameId, selectedRating);
+    onUpdateRating(selectedRating);
   };
 
   return (
