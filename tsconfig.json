@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-  "baseUrl": "src",
-  "paths": {
-    "@components/": ["./components/"],
-    "@features/": ["features/"],
-    "@hooks/": ["hooks/"],
-    "@tests/": ["tests/"],
-    "@utils/": ["utils/"]
-  },
-  "jsx": "react-jsx",
-  "strict": true,
-  "esModuleInterop": true,
-  "moduleResolution": "node"
+    "types": ["cypress", "node"],
+    "baseUrl": "src",
+    "paths": {
+      "@components/": ["./components/"],
+      "@features/": ["features/"],
+      "@hooks/": ["hooks/"],
+      "@tests/": ["tests/"],
+      "@utils/": ["utils/"]
+    },
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   },
   "include": ["src"]
 }
