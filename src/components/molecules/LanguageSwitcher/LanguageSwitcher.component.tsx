@@ -1,4 +1,4 @@
-// src/components/molecules/LanguageSwitcher/LanguageSwitcher.component.tsx
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const LanguageSwitcher = () => {

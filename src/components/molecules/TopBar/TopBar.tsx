@@ -5,9 +5,7 @@ import { Button } from '../../atoms/Button/Button';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useSafeNavigation } from '../../../hooks/useNavigation';
 
-interface TopBarProps {}
-
-export const TopBar: React.FC<TopBarProps> = () => {
+export const TopBar = (): React.ReactElement => {
   const location = useLocation();
   const { goBack } = useSafeNavigation();
   const { t } = useTranslation();

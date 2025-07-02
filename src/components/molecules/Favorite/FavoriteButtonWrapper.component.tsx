@@ -57,7 +57,7 @@ export const FavoriteButtonWrapperComponent: React.FC<FavoriteButtonProps> = ({
   }, [isFav]);
 
   return (
-    // @ts-ignore
+    // @ts-expect-error to allow web component to work
     <favorite-button
       ref={buttonRef as React.RefObject<HTMLElement>}
       game-id={id}
