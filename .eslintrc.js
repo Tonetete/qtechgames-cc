@@ -25,4 +25,21 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 'off',
   },
+  overrides: [
+    {
+      files: ['**/*.test.js', '**/__tests__/**/*.js'],
+      env: {
+        jest: true,
+      },
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+      },
+    },
+    {
+      files: ['./game-api/**/*.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+      },
+    },
+  ],
 };
