@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GameCatalogueList } from '../../organism/GameCatalogueList';
-import { InputSearchBoxComponent } from '../../molecules/InputSearchBox/InputSearchBox.component';
+import { InputSearchBox } from '../../molecules/InputSearchBox';
 import { useGames, useDebounce } from '../../../hooks';
 import { PlaceHolderText } from '../../atoms/PlaceHolderText';
 
@@ -29,9 +29,12 @@ export const ContainerGameCatalogueList = () => {
   return (
     <main className="flex flex-col h-full">
       <section id="filter-section" className="bg-white z-10 p-4 shadow-md">
-        <InputSearchBoxComponent
+        <InputSearchBox
           placeholder={t('search.placeholder')}
-          handleChange={(event) => handleSearchFilter(event.target.value)}
+          handleChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleSearchFilter(event.target.value)
+          }
+          value={filter}
         />
       </section>
       <section

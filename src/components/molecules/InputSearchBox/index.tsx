@@ -1,2 +1,2 @@
-import { InputSearchBoxComponent } from './InputSearchBox.component';
-export { InputSearchBoxComponent };
+import { InputSearchBox } from './InputSearchBox';
+export { InputSearchBox };
