@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TopBar } from './components/molecules/TopBar/TopBar';
+import { ProfilerComponent } from './components/utils/Profiler';
 
 // Lazy load route components
 const ContainerGameCatalogueListComponent = React.lazy(() =>
@@ -40,12 +41,27 @@ function App() {
               <Routes>
                 <Route
                   path="/"
-                  element={<ContainerGameCatalogueListComponent />}
+                  element={
+                    <ProfilerComponent id="GameCatalogList">
+                      <ContainerGameCatalogueListComponent />
+                    </ProfilerComponent>
+                  }
                 />
-                <Route path="/game/:id" element={<GameCatalogueDetail />} />
+                <Route
+                  path="/game/:id"
+                  element={
+                    <ProfilerComponent id="GameDetail">
+                      <GameCatalogueDetail />
+                    </ProfilerComponent>
+                  }
+                />
                 <Route
                   path="/favorites"
-                  element={<GameCatalogueFavoriteList />}
+                  element={
+                    <ProfilerComponent id="FavoritesList">
+                      <GameCatalogueFavoriteList />
+                    </ProfilerComponent>
+                  }
                 />
               </Routes>
             </Suspense>
