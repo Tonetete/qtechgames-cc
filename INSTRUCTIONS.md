@@ -74,6 +74,8 @@ Run tests headlessly:
 npm run cypress:run
 ```
 
+🚨 Important Note: To run E2E tests, you need to have the backend API running.  🚨
+
 🗂️ Project Structure
 ```
 /src
