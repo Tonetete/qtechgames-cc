@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { patchGameRating } from '../../../services/apis/game-api';
 import { useGameDetail } from '../../../hooks';
@@ -15,7 +14,6 @@ export const GameCatalogueDetail = (): React.ReactElement => {
   const [rating, setRating] = useState<number | null>(game?.rating || null);
   const { id } = useParams<{ id: string }>();
   const { updateGameRating } = useGameStore();
-  const queryClient = useQueryClient();
 
   const { data: fetchedGame, isLoading, error } = useGameDetail(id!);
 
