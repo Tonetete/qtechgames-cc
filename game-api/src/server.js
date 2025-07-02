@@ -11,21 +11,17 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Path to your games.json file
 const GAMES_FILE_PATH = path.join(__dirname, '../../', 'public', 'games.json');
 
 // GET all games
 app.get('/api/games', (req, res) => {
   try {
-    // Read games data
     const games = JSON.parse(fs.readFileSync(GAMES_FILE_PATH));
 
-    // Extract query parameters
     const page = parseInt(req.query.page) || 0;
     const pageSize = parseInt(req.query.pageSize) || 50;
     const searchTerm = req.query.search || '';
 
-    // Filter by search term if provided
     const filtered = searchTerm
       ? games.filter(
           (game) =>
@@ -34,13 +30,11 @@ app.get('/api/games', (req, res) => {
         )
       : games;
 
-    // Calculate pagination
     const start = page * pageSize;
     const end = start + pageSize;
     const items = filtered.slice(start, end);
     const nextPage = end < filtered.length ? page + 1 : null;
 
-    // Return paginated results
     res.json({
       items,
       nextPage,
@@ -80,25 +74,19 @@ app.patch('/api/games/:id/rating', (req, res) => {
       return res.status(400).json({ error: 'Invalid rating value' });
     }
 
-    // Read the games file
     const games = JSON.parse(fs.readFileSync(GAMES_FILE_PATH));
 
-    // Find and update the game
     const gameIndex = games.findIndex((game) => game.id === id);
 
     if (gameIndex === -1) {
       return res.status(404).json({ error: 'Game not found' });
     }
 
-    // Update rating
     games[gameIndex] = {
       ...games[gameIndex],
       rating: rating,
     };
 
-    console.log('game', games[gameIndex]);
-
-    // Write back to file
     fs.writeFileSync(GAMES_FILE_PATH, JSON.stringify(games, null, 2));
 
     res.json({ success: true, game: games[gameIndex] });
@@ -108,8 +96,13 @@ app.patch('/api/games/:id/rating', (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Games API available at http://localhost:${PORT}/api/games`);
-});
+// Start server only if not being required (for testing)
+let server;
+if (require.main === module) {
+  server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Games API available at http://localhost:${PORT}/api/games`);
+  });
+}
+
+module.exports = app;
