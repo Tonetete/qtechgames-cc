@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { patchGameRating } from '../../../services/apis/game-api';
 import { useGameDetail } from '../../../hooks';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
 import { RatingStars } from '../../molecules/RatingStars/RatingStars';
 import { useGameStore } from '../../../store/gameStore';
-import { API_URL_GAME_RATING } from '../../../constants/constants';
 
 export const GameCatalogueDetail = (): React.ReactElement => {
   const { t } = useTranslation();
@@ -32,20 +32,10 @@ export const GameCatalogueDetail = (): React.ReactElement => {
 
   useEffect(() => {
     if (!game || !rating) return;
-    fetch(`${API_URL_GAME_RATING.replace(':id', game.id)}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ rating }),
-    })
-      .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['game', game.id] });
-        queryClient.invalidateQueries({ queryKey: ['games'] });
-      })
-      .catch(() => {
-        throw new Error('Failed to update rating');
-      });
+    patchGameRating({
+      gameId: game.id,
+      rating,
+    });
   }, [rating]);
 
   if (isLoading) return <div className="p-8 text-center">Loading game…</div>;

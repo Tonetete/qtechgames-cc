@@ -1,29 +1,22 @@
 import {
+  UseQueryOptions,
   useInfiniteQuery,
   useQuery,
-  UseQueryOptions,
 } from '@tanstack/react-query';
 import { GameCatalogueItem } from '../interfaces/Game';
-import { useGameStore } from '../store/gameStore';
-import { API_URL_GAMES } from '../constants/constants';
+import {
+  getCatalogueGameItems,
+  getCatalogueItem,
+} from '../services/apis/game-api';
 
 const PAGE_SIZE = 50;
-const PATH = '/games.json';
-
-let allGames: GameCatalogueItem[] | null = null;
 
 const fetchPage = async ({ pageParam = 0, filter = '' }) => {
-  const url = new URL(API_URL_GAMES);
-
-  // Add query params for pagination and search
-  url.searchParams.append('page', pageParam.toString());
-  url.searchParams.append('pageSize', PAGE_SIZE.toString());
-  if (filter) url.searchParams.append('search', filter);
-
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error('Failed to fetch games');
-
-  const data = await res.json();
+  const data = await getCatalogueGameItems({
+    pageSize: PAGE_SIZE,
+    pageParam,
+    filter,
+  });
   return {
     items: data.items || [],
     nextPage: data.nextPage,
@@ -31,9 +24,7 @@ const fetchPage = async ({ pageParam = 0, filter = '' }) => {
 };
 
 async function fetchGameById(id: string): Promise<GameCatalogueItem> {
-  const res = await fetch(`${API_URL_GAMES}/${id}`);
-  if (!res.ok) throw new Error('Fetch failed');
-  return await res.json();
+  return await getCatalogueItem({ gameId: id });
 }
 
 export const useGameDetail = (
