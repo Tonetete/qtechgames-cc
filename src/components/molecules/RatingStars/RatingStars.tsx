@@ -1,17 +1,16 @@
-// src/components/molecules/RatingStars/RatingStars.tsx
 import React, { useState } from 'react';
 
 interface RatingStarsProps {
-  gameId?: string; // Make optional
+  gameId?: string;
   initialRating: number;
-  onUpdateRating?: (rating: number) => void; // Make optional
-  readOnly?: boolean; // Add this
-  size?: 'small' | 'medium' | 'large'; // Add this
+  onUpdateRating?: (rating: number) => void;
+  readOnly?: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 
 export const RatingStars: React.FC<RatingStarsProps> = ({
   initialRating,
-  onUpdateRating = () => {}, // Default no-op function
+  onUpdateRating = () => {},
   readOnly = false,
   size = 'medium',
 }: RatingStarsProps) => {
