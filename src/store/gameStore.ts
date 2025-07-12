@@ -5,7 +5,7 @@ import { GameCatalogueItem } from '../interfaces/Game';
 export interface State {
   gamesList: GameCatalogueItem[];
   favoriteGamesList: GameCatalogueItem[];
-  updateGameRating: (gameId: string, rating: number) => void;
+  updateGameRatingFavorite: (gameId: string, rating: number) => void;
 }
 
 const loadFavoriteGamesList = () => {
@@ -18,7 +18,7 @@ export const useGameStore = create(
   combine(
     {
       gamesList: [],
-      updateGameRating: () => {},
+      updateGameRatingFavorite: () => {},
       favoriteGamesList: loadFavoriteGamesList(),
     } as State,
     (set, get) => {

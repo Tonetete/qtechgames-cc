@@ -11,10 +11,10 @@ const ContainerGameCatalogueListComponent = React.lazy(() =>
   ).then((module) => ({ default: module.ContainerGameCatalogueList })),
 );
 
-const GameCatalogueDetail = React.lazy(() =>
+const ContainerGameCatalogueDetailComponent = React.lazy(() =>
   import(
     './components/organism/GameCatalogueDetail/GameCatalogueDetail.component'
-  ).then((module) => ({ default: module.GameCatalogueDetail })),
+  ).then((module) => ({ default: module.ContainerGameCatalogueDetail })),
 );
 
 const GameCatalogueFavoriteList = React.lazy(() =>
@@ -51,7 +51,7 @@ function App() {
                   path="/game/:id"
                   element={
                     <ProfilerComponent id="GameDetail">
-                      <GameCatalogueDetail />
+                      <ContainerGameCatalogueDetailComponent />
                     </ProfilerComponent>
                   }
                 />

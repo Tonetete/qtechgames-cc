@@ -1,25 +1,36 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { patchGameRating } from '../../../services/apis/game-api';
 import { useGameDetail } from '../../../hooks';
 import { GameCatalogueItem } from '../../../interfaces/Game';
 import { FavoriteButtonWrapperComponent } from '../../molecules/Favorite/FavoriteButtonWrapper.component';
 import { RatingStars } from '../../molecules/RatingStars/RatingStars';
 import { useGameStore } from '../../../store/gameStore';
+import { useUpdateGameRatingDataQuery } from '../../../hooks/useGames';
+import { GameFilterProvider, useGameFilter } from '../../../context';
+
+export const ContainerGameCatalogueDetail = (): React.ReactElement => {
+  return (
+    <GameFilterProvider>
+      <GameCatalogueDetail />
+    </GameFilterProvider>
+  );
+};
 
 export const GameCatalogueDetail = (): React.ReactElement => {
   const { t } = useTranslation();
+  const { filter } = useGameFilter();
   const [game, setGame] = useState<GameCatalogueItem | null>(null);
   const [rating, setRating] = useState<number | null>(game?.rating || null);
   const { id } = useParams<{ id: string }>();
-  const { updateGameRating } = useGameStore();
+  const { updateGameRatingFavorite } = useGameStore();
+  const updateGameRatingDataQuery = useUpdateGameRatingDataQuery(filter);
 
   const { data: fetchedGame, isLoading, error } = useGameDetail(id!);
 
   const onUpdateRating = useCallback((newRating: number) => {
     setRating(newRating);
-    updateGameRating(id!, newRating);
+    updateGameRatingFavorite(id!, newRating);
   }, []);
 
   useEffect(() => {
@@ -30,7 +41,7 @@ export const GameCatalogueDetail = (): React.ReactElement => {
 
   useEffect(() => {
     if (!game || !rating) return;
-    patchGameRating({
+    updateGameRatingDataQuery.mutate({
       gameId: game.id,
       rating,
     });

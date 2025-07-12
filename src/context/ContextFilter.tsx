@@ -25,5 +25,9 @@ export const GameFilterProvider = ({
 };
 
 export const useGameFilter = () => {
-  return useContext(GameFilterContext);
+  const context = useContext(GameFilterContext);
+  if (!context) {
+    throw new Error('useGameFilter must be used within a GameFilterProvider');
+  }
+  return context;
 };

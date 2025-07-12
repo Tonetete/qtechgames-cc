@@ -18,11 +18,7 @@
     "express": "^5.1.0",
     "fs": "^0.0.1-security"
   },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
-  },
+  "eslintConfig": {},
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/supertest": "^6.0.3",
